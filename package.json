@@ -1,5 +1,5 @@
 {
-  "name": "@gabrielkqw/synapse-ui",
+  "name": "@costadev/synapse-ui",
   "version": "0.5.0",
   "description": "Frontend workflow skills and local convention memory for Next.js, React, and TypeScript.",
   "type": "module",

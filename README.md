@@ -40,11 +40,11 @@ Run the dependency-free test suite with `npm test`. GitHub Actions runs it on ev
 
 ## npm package
 
-The npm package name is `@gabrielkqw/synapse-ui`; the unscoped `synapse-ui` name is already taken. It ships only the CLI, plugin manifests, skills, and references — not tests, CI, or development memory.
+The npm package name is `@costadev/synapse-ui`; the unscoped `synapse-ui` name is already taken. It ships only the CLI, plugin manifests, skills, and references — not tests, CI, or development memory.
 
 ```text
-npm install --save-dev @gabrielkqw/synapse-ui
-npx --package @gabrielkqw/synapse-ui synapse-ui list
+npm install --save-dev @costadev/synapse-ui
+npx --package @costadev/synapse-ui synapse-ui list
 ```
 
 `synapse-ui` is the local memory CLI. It stores project conventions in `.synapse-ui/memories/`; it does not send project data to a service.

@@ -1,19 +1,19 @@
 # Weave state
 
 ## Task
-Publish Synapse UI under the authenticated npm account scope.
+Improve Synapse UI's README into a clear installation, usage, safety, and release guide.
 
 ## Goal
-Align the npm package identity and installation instructions with the authenticated npm user `costadev`, so the first public publish can create the scoped package.
+Make a first-time user able to understand the product, activate it in Codex or Claude Code, save and query a convention, and publish it under the correct npm scope without guessing undocumented behavior.
 
 ## Constraints
-Keep the GitHub repository identity unchanged, publish with public access, add no token or credential to the repository, preserve the existing user Git identity, and change only the npm scope and documents that state it.
+Document only implemented behavior; preserve `@costadev/synapse-ui`, the GitHub repository identity, and the no-telemetry/local-first boundary. Do not expose credentials or imply that an unpublished package can already be installed from npm.
 
 ## Not requested
-No automatic publish attempt, npm organization creation, token configuration, repository rename, CLI behavior change, dependency change, or modification to project-local memories.
+No runtime or CLI behavior change, package publication attempt, branding asset, dependency, repository rename, npm account configuration, or modification to project-local memories.
 
 ## Completion criteria
-`package.json` and README use `@costadev/synapse-ui`; tests and `npm pack --dry-run` pass; the correction is committed and pushed using the user's Git identity.
+README presents the supported hosts, CLI contract, memory safeguards, workflow catalog, development checks, and truthful publication steps; formatting and tests pass; changes are committed and pushed with the user's Git identity.
 
 ## Blocking questions
 none
@@ -64,37 +64,43 @@ Decisions: use `@costadev/synapse-ui`, which matches the authenticated npm ident
 
 Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The expanded plugin's `npm run test` passed two tests that exercise save/list/find/get/delete plus unsafe-name and unconfirmed-delete rejection. After adding the security workflows, the same test suite passed again, Claude validation accepted all nine skills, and both manifests were parsed as valid JSON. The production expansion test suite passed again, Claude validation accepted all twelve skills, and a Node check confirmed CI contract plus both `0.4.0` manifests. The npm/cyber/save expansion test suite passed with structured-save acceptance and rejection cases; `npm pack --dry-run --json` verified 23 intended distribution files and Claude validation passed again. Codex cachebuster was updated to `0.5.0+codex.20260925175730` and that exact version was installed from the personal marketplace. Initial implementation commit `5bc3e4a` was pushed to `origin/main`.
 
-Next action: patch package metadata and README, run tests and package dry-run, then commit and push. The user can run `npm publish` afterward from the corrected package directory.
+Next action: replace the terse README with a product-oriented guide tied to the actual CLI and manifests, then verify formatting and tests before commit/push.
 
 ## Plan
-1. Update the package scope at the single npm identity source and the corresponding README install examples.
-2. Verify the existing CLI test and npm package contents without publishing.
-3. Commit and push the metadata correction with the user's configured Git identity.
+1. Cover value proposition and the separate Codex, Claude Code, and npm entry paths.
+2. Document the exact memory CLI contract and its safety invariants from `scripts/synapse-memory.mjs`.
+3. List all existing workflows and verification/release commands without adding functionality.
+4. Validate Markdown-related diff and tests, then commit and push.
 
 ## Changes made
-The package scope and README examples now use `@costadev/synapse-ui`, matching the authenticated npm account. The CLI, manifests, GitHub repository URLs, and release workflow remain unchanged.
+README now explains the local-first product boundary, Codex/Claude activation, npm's post-publication usage, structured memory commands, every included workflow, safety boundaries, development checks, and release ownership. No runtime behavior changed.
 
 ## Review
-The npm scope is a shared package identity controlled only by `package.json`; README examples are the only consumer-facing copies. Keeping GitHub coordinates unchanged avoids an unrelated repository migration. No secret, dependency, or runtime behavior is affected.
+The README distinguishes local agent-plugin loading from npm installation because npm publication has not yet succeeded. CLI examples match the script's required structured fields and deletion/overwrite protections.
 
 ## Verification
-Command: `npm run test`
+Command: `git diff --check`
 Exit: 0
-Summary: 2 tests passed, including accepted structured save, rejected malformed inputs, and guarded deletion.
+Summary: README and working-memory edits have no whitespace errors.
+Failures: none
+
+Command: `npm test`
+Exit: 0
+Summary: 2 tests passed for the local memory lifecycle and safety guards.
+Failures: none
+
+Command: `claude plugin validate .`
+Exit: 0
+Summary: Claude Code accepted the existing plugin manifest after the documentation-only change.
 Failures: none
 
 Command: `npm pack --dry-run --json`
 Exit: 0
-Summary: the publish artifact is `@costadev/synapse-ui@0.5.0` with 23 intended files; `prepack` reran the same passing test suite.
-Failures: none
-
-Command: `git diff --check`
-Exit: 0
-Summary: no whitespace errors.
+Summary: `@costadev/synapse-ui@0.5.0` contains the expected 23 publish files and prepack reran tests successfully.
 Failures: none
 
 ## Fidelity check
-The change directly fixes the confirmed scope-ownership mismatch and changes no runtime behavior or unrelated repository identity. The package manager dry-run proves the corrected public artifact name; tests prove packaging still triggers and passes existing safeguards. No smaller change would make the installed package name and publication target agree.
+The README now covers the requested product journey without adding or claiming unimplemented features. It accurately separates current local plugin installation from npm use after first publication, documents the CLI's enforced save/delete rules, and retains the privacy boundary. Validation proves that the shipped artifact and both existing test and Claude manifest contracts remain valid.
 
 ## Open / blocked
-After this correction, first publish must be initiated by the user from the package directory. Trusted Publishing remains optional for release automation and should be configured in npm for `@costadev/synapse-ui` before a GitHub Release is used.
+The first npm publication remains a user-owned action from the package directory; the README states that condition explicitly.

@@ -1,70 +1,123 @@
 # Synapse UI
 
-Synapse UI is a local-first frontend workflow plugin for Next.js, React, and TypeScript. It remembers project conventions in Markdown and provides focused skills for building consistent, accessible frontend work.
+**Memória de projeto e workflows de frontend para Next.js, React e TypeScript.**
 
-## What it provides
+Synapse UI transforma convenções que normalmente se perdem em conversas — por exemplo, como um campo deve validar, quando usar Server Components ou como revisar um payload — em registros Markdown locais e reutilizáveis. Ele também adiciona skills focadas para criar, revisar, proteger, testar e otimizar frontend.
 
-| Workflow | Use it for |
-| --- | --- |
-| `synapse-save` / `synapse-use` | Save, list, find, recall, and deliberately apply project conventions |
-| `synapse-component` | Component APIs, state coverage, accessibility, and responsive behavior |
-| `synapse-form` | Inputs, validation, submit feedback, and error UX |
-| `synapse-next` | Next.js App Router routes, data boundaries, metadata, and loading states |
-| `synapse-design-system` | Tokens, primitives, visual states, and variants |
-| `synapse-review` | Review frontend changes against real project conventions |
-| `synapse-security` | Secure Server Actions, data exposure, env vars, rendered content, and browser headers |
-| `synapse-payload-review` | Trace and review browser payloads through validation, authorization, storage, and response DTOs |
-| `synapse-performance` | Improve Next.js render paths, bundles, assets, scripts, and Web Vitals |
-| `synapse-test` | Add or review behavioral, accessibility, security, and E2E test coverage |
-| `synapse-seo` | Implement or review metadata, social previews, sitemap, robots, and indexability |
-| `synapse-threat-model` | Map defensive controls for a frontend feature's real trust boundaries |
-| `synapse-dependency-review` | Review a package before it changes security, bundle, license, or supply-chain risk |
+- Local-first: memórias vivem no próprio projeto, em `.synapse-ui/memories/`.
+- Compatível com Codex e Claude Code usando o mesmo diretório `skills/`.
+- Sem dependências de runtime, telemetria ou sincronização remota.
+- Feito para decisões deliberadas: uma memória é consultada e aplicada, nunca injeta alterações silenciosamente.
 
-## Memories
+## Comece em minutos
 
-Memories stay in the target project, under `.synapse-ui/memories/`. They are ordinary Markdown files, so they can be reviewed and committed with the project if the team wants shared conventions.
+### Codex
+
+Instale a entrada `synapse-ui` do seu marketplace pessoal do Codex e inicie uma nova conversa. Depois, descreva a intenção naturalmente:
 
 ```text
-node <plugin-root>/scripts/synapse-memory.mjs save --name input-contract --title "Input contract" --scope "shared forms" --tags "forms,accessibility,typescript" --rule "Inputs use a label, controlled value and onChange." --when "Building reusable form fields." --example "<Field id=\"email\" />" --evidence "user-confirmed"
-node <plugin-root>/scripts/synapse-memory.mjs list
-node <plugin-root>/scripts/synapse-memory.mjs find --query input
-node <plugin-root>/scripts/synapse-memory.mjs get --name input-contract
-node <plugin-root>/scripts/synapse-memory.mjs delete --name input-contract --confirm
+Synapse, salve nossa convenção de campos de formulário.
+Synapse, aplique input-contract ao CheckoutForm.
+Synapse, revise este payload antes de eu criar a Server Action.
 ```
 
-Each saved memory has a rule, context, scope, tags, optional exception/example, and evidence. The script rejects incomplete or badly tagged records, refuses overwrites unless `--replace` is explicit, and requires `--confirm` for deletion. Never store credentials, tokens, private keys, or customer information in a memory.
+### Claude Code
 
-## Quality checks
+Para carregar o plugin durante uma sessão de desenvolvimento:
 
-Run the dependency-free test suite with `npm test`. GitHub Actions runs it on every push and pull request. The plugin also carries an MIT [license](LICENSE).
+```bash
+claude --plugin-dir C:\path\to\synapse-ui
+```
 
-## npm package
-
-The npm package name is `@costadev/synapse-ui`; the unscoped `synapse-ui` name is already taken. It ships only the CLI, plugin manifests, skills, and references — not tests, CI, or development memory.
+Use as skills com namespace:
 
 ```text
+/synapse-ui:synapse-save
+/synapse-ui:synapse-component
+/synapse-ui:synapse-security
+```
+
+### CLI via npm
+
+Após a primeira publicação no npm, instale o pacote no projeto alvo:
+
+```bash
 npm install --save-dev @costadev/synapse-ui
 npx --package @costadev/synapse-ui synapse-ui list
 ```
 
-`synapse-ui` is the local memory CLI. It stores project conventions in `.synapse-ui/memories/`; it does not send project data to a service.
+O comando `synapse-ui` usa o diretório atual como raiz do projeto. Para operar outro projeto sem trocar de pasta, defina `SYNAPSE_UI_ROOT` para o caminho dele.
 
-Publishing is intentionally release-only. Before the first release, configure npm trusted publishing for this GitHub repository and the exact scoped package name. The `Publish npm package` workflow then publishes from a GitHub Release with short-lived OIDC credentials; it does not require an npm token in this repository.
+## Salve convenções que realmente ajudam
 
-## Defensive cybersecurity
+Uma memória não é um bloco solto de prompt. Ela exige uma regra, escopo, situação de aplicação e tags; também pode guardar exceções, exemplo e evidência.
 
-Use `synapse-threat-model` before a sensitive feature crosses a trust boundary, and `synapse-dependency-review` before adding or upgrading packages. These workflows are defensive: they identify controls and risk without scanning or attempting to exploit systems.
+Execute a partir da raiz do projeto que receberá a convenção:
 
-## Codex
-
-Install `synapse-ui` from your personal marketplace, then start a new Codex thread. Natural-language requests such as `synapse save our input convention` or `synapse apply input-contract to CheckoutForm` select the appropriate skill.
-
-## Claude Code
-
-Run a one-session development load from the plugin directory:
-
-```text
-claude --plugin-dir C:\\path\\to\\synapse-ui
+```bash
+npx --package @costadev/synapse-ui synapse-ui save --name input-contract --title "Input contract" --scope "shared forms" --tags "forms,accessibility,typescript" --rule "Inputs use a visible label, controlled value, and onChange." --when "Building reusable form fields." --avoid "Do not apply to hidden machine-only fields." --example '<Field id="email" />' --evidence "User-confirmed project convention"
 ```
 
-Then invoke `/synapse-ui:synapse-save`, `/synapse-ui:synapse-component`, or another namespaced skill. Claude Code reads the same `skills/` directory and uses `.claude-plugin/plugin.json` for the plugin manifest.
+A memória criada fica em `.synapse-ui/memories/input-contract.md`. Como é Markdown comum, a equipe pode revisar e versionar as convenções junto do código.
+
+### Consulte e mantenha memórias
+
+```bash
+synapse-ui list
+synapse-ui find --query input
+synapse-ui get --name input-contract
+synapse-ui delete --name input-contract --confirm
+```
+
+Nomes aceitam apenas letras minúsculas, números e hífens. O comando não sobrescreve um registro sem `--replace`, e exclusão sempre exige `--confirm`.
+
+## Workflows incluídos
+
+| Skill | Para usar quando você precisa… |
+| --- | --- |
+| `synapse-save` / `synapse-use` | capturar, buscar, recuperar e aplicar convenções de projeto |
+| `synapse-component` | definir APIs de componentes, estados, acessibilidade e responsividade |
+| `synapse-form` | criar campos, validação, feedback de envio e UX de erro |
+| `synapse-next` | trabalhar com App Router, limites de dados, metadata e estados de carregamento |
+| `synapse-design-system` | estruturar tokens, primitivas, variantes e estados visuais |
+| `synapse-review` | revisar uma mudança contra as convenções reais do projeto |
+| `synapse-security` | proteger Server Actions, variáveis de ambiente, conteúdo renderizado e headers |
+| `synapse-payload-review` | seguir um payload do browser até validação, autorização, persistência e DTO de resposta |
+| `synapse-threat-model` | mapear fronteiras de confiança e controles defensivos de uma funcionalidade |
+| `synapse-dependency-review` | avaliar risco de pacote, licença, supply chain, bundle e manutenção antes de adicioná-lo |
+| `synapse-performance` | melhorar renderização, bundle, assets, scripts e Web Vitals no Next.js |
+| `synapse-test` | planejar testes comportamentais, acessíveis, de segurança e E2E |
+| `synapse-seo` | implementar metadata, previews sociais, sitemap, robots e indexabilidade |
+
+## Privacidade e segurança
+
+Synapse UI armazena arquivos somente no projeto alvo e não envia dados a um serviço. Nunca salve credenciais, tokens, chaves privadas, dados de clientes ou conteúdo sensível nas memórias.
+
+As skills de segurança são defensivas. Para mutações, tratam Server Actions e Route Handlers como limites públicos: valide o dado no servidor, autorize a ação e devolva somente o DTO necessário. Elas não implementam autenticação nem fazem varreduras ou exploração de sistemas.
+
+## Desenvolvimento
+
+Requisitos: Node.js 20 ou superior.
+
+```bash
+npm test
+npm pack --dry-run
+claude plugin validate .
+```
+
+O teste usa o runner nativo do Node e cobre o ciclo de salvar, buscar, recuperar e excluir uma memória, além das proteções contra nomes inválidos, registros incompletos e exclusão sem confirmação.
+
+## Publicação no npm
+
+O pacote público é `@costadev/synapse-ui`; o nome sem escopo `synapse-ui` já está ocupado. Antes da primeira publicação, autentique-se na conta npm `costadev`:
+
+```bash
+npm whoami
+npm publish
+```
+
+Para publicar a partir de uma GitHub Release, configure npm Trusted Publishing para o pacote `@costadev/synapse-ui` e o repositório `GabrielKqw/Synapse-UI`. O workflow usa credenciais OIDC de curta duração e não requer token npm no repositório.
+
+## Licença
+
+[MIT](LICENSE) © Gabriel Costa.

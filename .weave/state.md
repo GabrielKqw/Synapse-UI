@@ -1,19 +1,19 @@
 # Weave state
 
 ## Task
-Replace the weak free-text Synapse save flow with validated, reusable frontend convention records.
+Publish Synapse UI under the authenticated npm account scope.
 
 ## Goal
-Ensure every saved convention has an actionable rule, application boundary, tags, exceptions, example, and evidence instead of an unstructured text blob.
+Align the npm package identity and installation instructions with the authenticated npm user `costadev`, so the first public publish can create the scoped package.
 
 ## Constraints
-Use no runtime dependency; store only project conventions beneath `.synapse-ui/memories`; reject unsafe memory names and do not persist credentials, tokens, personal data, or generated source code unless the user explicitly supplies it as the convention. The plugin points to `https://github.com/GabrielKqw/Synapse-UI` and contains compatible Codex and Claude Code manifests. Do not configure a Codex Git identity; use only the user's existing Git identity for any authorized commit. Use official Next.js and React/W3C guidance; do not prescribe a new validation, auth, or styling dependency.
+Keep the GitHub repository identity unchanged, publish with public access, add no token or credential to the repository, preserve the existing user Git identity, and change only the npm scope and documents that state it.
 
 ## Not requested
-No remote synchronization, embeddings/vector database, editor extension, telemetry, authentication implementation, UI framework dependency, automatic `npm publish`, weakening of existing security controls, or silent migration of user memories.
+No automatic publish attempt, npm organization creation, token configuration, repository rename, CLI behavior change, dependency change, or modification to project-local memories.
 
 ## Completion criteria
-The save CLI rejects incomplete convention records; saved Markdown has the structured sections; save/use skills preserve the same schema; automated tests prove accepted and rejected inputs.
+`package.json` and README use `@costadev/synapse-ui`; tests and `npm pack --dry-run` pass; the correction is committed and pushed using the user's Git identity.
 
 ## Blocking questions
 none
@@ -56,55 +56,45 @@ none
   reason: translates a user request into one durable, scoped convention record.
   relation: it is the only workflow permitted to create a memory, so it must define the record quality bar.
 
-Confirmed facts: the scaffold registered `synapse-ui` in the personal marketplace at `C:\Users\Admin\.agents\plugins\marketplace.json`; no prior marketplace entry existed. User explicitly selected the product name and repository URL. The local Git identity is the user's identity, not a Codex address.
+Confirmed facts: npm authentication reports `costadev`; npm rejected `@gabrielkqw/synapse-ui` because the authenticated account did not own that scope. A GitHub username does not create an npm scope. The unscoped `synapse-ui` name remains unavailable. The local Git identity is the user's identity, not a Codex address.
 
 Claude Code discovers plugin manifests at `.claude-plugin/plugin.json` and loads skills from the same root-level `skills/<name>/SKILL.md` layout that Synapse UI already uses. Its skills will be namespaced as `/synapse-ui:synapse-save` and `/synapse-ui:synapse-use`; Codex consumes the same skill files through its `.codex-plugin/plugin.json` manifest.
 
-Decisions: implement a local Markdown store instead of remote or semantic-memory infrastructure; keep application as an agent-guided action after the target flow has been inspected. Build focused skills rather than one oversized frontend skill so only the needed workflow is loaded. Treat Server Actions and Route Handlers as public endpoints; validate and authorize at each mutation boundary, not in UI-only gates. Prefer Next.js native image, font, script, metadata, streaming, and testing paths before recommending dependencies. The unscoped npm name is unavailable, so use the publication-ready scoped name `@gabrielkqw/synapse-ui`. Save records require explicit rule, applicable context, scope, and tags; optional sections document exceptions, a concrete example, and evidence without inventing them.
+Decisions: use `@costadev/synapse-ui`, which matches the authenticated npm identity, rather than attempting to create or claim a mismatched `@gabrielkqw` scope. Keep GitHub URLs under `GabrielKqw/Synapse-UI`; npm ownership and GitHub ownership are independent. Preserve public access through existing `publishConfig`.
 
 Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The expanded plugin's `npm run test` passed two tests that exercise save/list/find/get/delete plus unsafe-name and unconfirmed-delete rejection. After adding the security workflows, the same test suite passed again, Claude validation accepted all nine skills, and both manifests were parsed as valid JSON. The production expansion test suite passed again, Claude validation accepted all twelve skills, and a Node check confirmed CI contract plus both `0.4.0` manifests. The npm/cyber/save expansion test suite passed with structured-save acceptance and rejection cases; `npm pack --dry-run --json` verified 23 intended distribution files and Claude validation passed again. Codex cachebuster was updated to `0.5.0+codex.20260925175730` and that exact version was installed from the personal marketplace. Initial implementation commit `5bc3e4a` was pushed to `origin/main`.
 
-Next action: commit and push the full npm/cyber/save block; npm Trusted Publishing setup remains a user-owned account configuration before the first release.
+Next action: patch package metadata and README, run tests and package dry-run, then commit and push. The user can run `npm publish` afterward from the corrected package directory.
 
 ## Plan
-1. Replace `--body` with required `--rule`, `--when`, `--scope`, and `--tags`; format optional exception/example/evidence data predictably.
-2. Make save derive and confirm the fields, then read back the saved record; make use respect scope and exceptions.
-3. Test structured output and missing-field rejection before committing and pushing the complete block.
+1. Update the package scope at the single npm identity source and the corresponding README install examples.
+2. Verify the existing CLI test and npm package contents without publishing.
+3. Commit and push the metadata correction with the user's configured Git identity.
 
 ## Changes made
-Plugin scaffold registered; manifest metadata aligned with the selected name, owner, and repository. A Claude Code manifest was added without duplicating the skills or persistence script. The plugin now includes component, form, Next.js, design-system, review, security, payload-review, performance, test, SEO, threat-model, and dependency-review workflows, a shared frontend baseline, researched security and production contracts, an MIT license, CI, a release-only trusted npm publishing workflow, and a user-facing README. The persistence script supports content search and guarded deletion; saves now require rule, applicable context, scope, and tags, with optional exception, example, and evidence sections. Node's native test runner covers the storage lifecycle and structured-save safety guards.
+The package scope and README examples now use `@costadev/synapse-ui`, matching the authenticated npm account. The CLI, manifests, GitHub repository URLs, and release workflow remain unchanged.
 
 ## Review
-The shared `skills/` layout remains valid for both hosts. The storage script keeps all persistence in one path, validates memory slugs, resolves the final path beneath the project-local store, refuses overwrite unless `--replace` is explicit, and requires a separate confirmation for deletion. Fourteen specialised skills share frontend, security, and production references rather than duplicating advice. The save workflow now rejects vague/unstructured persistence at the shared script boundary. The security workflow enforces server-side validation and authorization without prescribing an auth or validation library. CI is deliberately dependency-free and read-only; npm publishing uses OIDC only after the user configures trusted publishing in npm. No credentials, external services, or dependencies are introduced.
+The npm scope is a shared package identity controlled only by `package.json`; README examples are the only consumer-facing copies. Keeping GitHub coordinates unchanged avoids an unrelated repository migration. No secret, dependency, or runtime behavior is affected.
 
 ## Verification
-Command: `claude plugin validate C:\Users\Admin\plugins\synapse-ui`
-Exit: 0
-Summary: Claude Code accepted the `.claude-plugin/plugin.json` manifest and both skills.
-Failures: none
-
-Command: Node manifest and skill presence check
-Exit: 0
-Summary: Codex and Claude manifests both name `synapse-ui`; `synapse-save` and `synapse-use` skill files are present.
-Failures: none
-
-Command: `python ...validate_plugin.py C:\Users\Admin\plugins\synapse-ui`
-Exit: 1
-Summary: Not a plugin validation result; the validator process stopped because `yaml` is not installed locally.
-Failures: `ModuleNotFoundError: No module named 'yaml'`
-
 Command: `npm run test`
 Exit: 0
-Summary: 2 tests passed, covering the full local memory lifecycle and both destructive-path guards.
+Summary: 2 tests passed, including accepted structured save, rejected malformed inputs, and guarded deletion.
 Failures: none
 
-Command: `codex plugin add synapse-ui@personal`
+Command: `npm pack --dry-run --json`
 Exit: 0
-Summary: installed local cache version `0.5.0+codex.20260925175730`.
+Summary: the publish artifact is `@costadev/synapse-ui@0.5.0` with 23 intended files; `prepack` reran the same passing test suite.
+Failures: none
+
+Command: `git diff --check`
+Exit: 0
+Summary: no whitespace errors.
 Failures: none
 
 ## Fidelity check
-The expanded plugin now delivers the requested complete frontend surface: durable conventions plus component, form, Next.js, design-system, review, security, payload-review, performance, test, SEO, threat-model, and dependency-review workflows. It adds a scoped npm package definition, local CLI, release-only trusted-publish workflow, test runner, CI, license, references, and documentation, while preserving no-dependency, no-telemetry, and no-automatic-edit boundaries. Both host manifests point to the same skill implementation. The prior end-to-end disk-write gap is closed by the passing temporary-directory test.
+The change directly fixes the confirmed scope-ownership mismatch and changes no runtime behavior or unrelated repository identity. The package manager dry-run proves the corrected public artifact name; tests prove packaging still triggers and passes existing safeguards. No smaller change would make the installed package name and publication target agree.
 
 ## Open / blocked
-The Codex-specific schema validator still needs PyYAML available locally. Before the first npm release, configure npm Trusted Publishing for `@gabrielkqw/synapse-ui` and this GitHub repository; do not add an npm token to the repository.
+After this correction, first publish must be initiated by the user from the package directory. Trusted Publishing remains optional for release automation and should be configured in npm for `@costadev/synapse-ui` before a GitHub Release is used.

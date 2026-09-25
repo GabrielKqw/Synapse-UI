@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { resolve, join, relative, sep } from "node:path";
+import { existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
+import { resolve, relative, sep } from "node:path";
 
 const [command, ...args] = process.argv.slice(2);
 const root = resolve(process.env.SYNAPSE_UI_ROOT || process.cwd());
@@ -57,6 +57,22 @@ if (command === "save") {
   const file = memoryPath(name);
   if (!existsSync(file)) fail(`'${name}' does not exist in this project.`);
   process.stdout.write(readFileSync(file, "utf8"));
+} else if (command === "find") {
+  const query = option("--query");
+  if (!query?.trim()) fail("find requires --query.");
+  const normalized = query.toLocaleLowerCase();
+  const matches = list().filter((name) =>
+    name.includes(normalized) || readFileSync(memoryPath(name), "utf8").toLocaleLowerCase().includes(normalized),
+  );
+  console.log(matches.length ? matches.join("\n") : "No Synapse UI memories match that query.");
+} else if (command === "delete") {
+  const name = option("--name");
+  if (!name) fail("delete requires --name.");
+  if (!args.includes("--confirm")) fail("delete requires --confirm to prevent accidental loss.");
+  const file = memoryPath(name);
+  if (!existsSync(file)) fail(`'${name}' does not exist in this project.`);
+  unlinkSync(file);
+  console.log(`Deleted ${name} from ${memoryDir}`);
 } else {
-  fail("use one of: save, list, get.");
+  fail("use one of: save, list, get, find, delete.");
 }

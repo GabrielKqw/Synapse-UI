@@ -1,26 +1,37 @@
 {
   "name": "synapse-ui",
-  "version": "0.1.0",
-  "description": "Capture and reuse durable Next.js and TypeScript frontend conventions.",
+  "version": "0.4.0+codex.20260925175108",
+  "description": "Build, secure, test, optimize, and standardize Next.js frontend workflows.",
   "author": {
     "name": "Gabriel Costa"
   },
   "homepage": "https://github.com/GabrielKqw/Synapse-UI",
   "repository": "https://github.com/GabrielKqw/Synapse-UI",
   "license": "MIT",
-  "keywords": ["nextjs", "typescript", "frontend", "patterns", "memory"],
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "frontend",
+    "accessibility",
+    "design-system",
+    "patterns",
+    "memory"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Synapse UI",
-    "shortDescription": "Remember and apply frontend conventions.",
-    "longDescription": "Stores durable Next.js and TypeScript patterns in each project, then recalls or applies them when requested.",
+    "shortDescription": "Ship secure, fast frontend work.",
+    "longDescription": "Stores project conventions and adds workflows for frontend implementation, security, payload review, tests, performance, and SEO.",
     "developerName": "Gabriel Costa",
     "category": "Productivity",
-    "capabilities": ["Write"],
+    "capabilities": [
+      "Write"
+    ],
     "defaultPrompt": [
-      "Synapse save a TypeScript input convention.",
-      "Synapse recall our form-validation conventions.",
-      "Synapse apply the input convention to this component."
+      "Synapse optimize this Next.js page.",
+      "Synapse test this checkout flow.",
+      "Synapse review this Server Action payload."
     ],
     "brandColor": "#7C3AED"
   }

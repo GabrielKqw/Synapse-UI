@@ -7,7 +7,7 @@ Create the marketplace-backed Synapse UI plugin for reusable Next.js and TypeScr
 Make `synapse save`, `synapse recall`, `synapse list`, and `synapse apply` usable through focused Codex skills, with durable project-local memory files.
 
 ## Constraints
-Use no runtime dependency; store only project conventions beneath `.synapse-ui/memories`; reject unsafe memory names and do not persist credentials, tokens, personal data, or generated source code unless the user explicitly supplies it as the convention. The plugin points to `https://github.com/GabrielKqw/Synapse-UI` and contains compatible Codex and Claude Code manifests. Do not create commits or configure a Codex Git identity; use only the user's existing Git identity for any authorized commit.
+Use no runtime dependency; store only project conventions beneath `.synapse-ui/memories`; reject unsafe memory names and do not persist credentials, tokens, personal data, or generated source code unless the user explicitly supplies it as the convention. The plugin points to `https://github.com/GabrielKqw/Synapse-UI` and contains compatible Codex and Claude Code manifests. Do not configure a Codex Git identity; use only the user's existing Git identity for any authorized commit.
 
 ## Not requested
 No remote synchronization, embeddings/vector database, editor extension, telemetry, authentication, or automatic repository commits.
@@ -38,7 +38,7 @@ Claude Code discovers plugin manifests at `.claude-plugin/plugin.json` and loads
 
 Decisions: implement a local Markdown store instead of remote or semantic-memory infrastructure; keep application as an agent-guided action after the target flow has been inspected.
 
-Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The runtime write test was blocked before execution by the terminal sandbox (`EPERM` creating `C:\tmp\.synapse-ui\memories`), so it does not establish a script defect.
+Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The runtime write test was blocked before execution by the terminal sandbox (`EPERM` creating `C:\tmp\.synapse-ui\memories`), so it does not establish a script defect. Initial implementation commit `5bc3e4a` was pushed to `origin/main`.
 
 Next action: install or load the plugin in Codex and exercise `synapse save` in a normal project workspace; the current terminal sandbox cannot create the isolated test store.
 

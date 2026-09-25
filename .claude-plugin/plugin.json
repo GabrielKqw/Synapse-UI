@@ -1,0 +1,13 @@
+{
+  "name": "synapse-ui",
+  "description": "Capture and reuse durable Next.js and TypeScript frontend conventions.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Gabriel Costa",
+    "url": "https://github.com/GabrielKqw"
+  },
+  "homepage": "https://github.com/GabrielKqw/Synapse-UI",
+  "repository": "https://github.com/GabrielKqw/Synapse-UI",
+  "license": "MIT",
+  "keywords": ["nextjs", "typescript", "frontend", "patterns", "memory"]
+}

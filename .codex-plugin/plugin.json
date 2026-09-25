@@ -1,0 +1,27 @@
+{
+  "name": "synapse-ui",
+  "version": "0.1.0",
+  "description": "Capture and reuse durable Next.js and TypeScript frontend conventions.",
+  "author": {
+    "name": "Gabriel Costa"
+  },
+  "homepage": "https://github.com/GabrielKqw/Synapse-UI",
+  "repository": "https://github.com/GabrielKqw/Synapse-UI",
+  "license": "MIT",
+  "keywords": ["nextjs", "typescript", "frontend", "patterns", "memory"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Synapse UI",
+    "shortDescription": "Remember and apply frontend conventions.",
+    "longDescription": "Stores durable Next.js and TypeScript patterns in each project, then recalls or applies them when requested.",
+    "developerName": "Gabriel Costa",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "defaultPrompt": [
+      "Synapse save a TypeScript input convention.",
+      "Synapse recall our form-validation conventions.",
+      "Synapse apply the input convention to this component."
+    ],
+    "brandColor": "#7C3AED"
+  }
+}

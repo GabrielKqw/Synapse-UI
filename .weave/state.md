@@ -1,19 +1,19 @@
 # Weave state
 
 ## Task
-Complete Synapse UI's production frontend workflows with performance, testing, SEO, licensing, and CI.
+Replace the weak free-text Synapse save flow with validated, reusable frontend convention records.
 
 ## Goal
-Make the plugin usable through the full frontend delivery path: design and implementation through performance, quality verification, discoverability, and repository checks.
+Ensure every saved convention has an actionable rule, application boundary, tags, exceptions, example, and evidence instead of an unstructured text blob.
 
 ## Constraints
 Use no runtime dependency; store only project conventions beneath `.synapse-ui/memories`; reject unsafe memory names and do not persist credentials, tokens, personal data, or generated source code unless the user explicitly supplies it as the convention. The plugin points to `https://github.com/GabrielKqw/Synapse-UI` and contains compatible Codex and Claude Code manifests. Do not configure a Codex Git identity; use only the user's existing Git identity for any authorized commit. Use official Next.js and React/W3C guidance; do not prescribe a new validation, auth, or styling dependency.
 
 ## Not requested
-No remote synchronization, embeddings/vector database, editor extension, telemetry, authentication implementation, UI framework dependency, automatic repository commits, deployment, or weakening of existing security controls.
+No remote synchronization, embeddings/vector database, editor extension, telemetry, authentication implementation, UI framework dependency, automatic `npm publish`, weakening of existing security controls, or silent migration of user memories.
 
 ## Completion criteria
-Performance, test, and SEO skills plus a production reference exist; CI runs the dependency-free test suite; the license matches manifest metadata; local tests and host validation pass.
+The save CLI rejects incomplete convention records; saved Markdown has the structured sections; save/use skills preserve the same schema; automated tests prove accepted and rejected inputs.
 
 ## Blocking questions
 none
@@ -46,27 +46,36 @@ none
 - file: `.github/workflows/test.yml`
   reason: verifies the plugin's deterministic storage behavior on pull requests and pushes.
   relation: makes local validation repeatable for every contributor.
+- file: `package.json`
+  reason: defines npm package identity, CLI entrypoint, packed files, and publish guardrails.
+  relation: turns the local persistence script into an installable command without adding a runtime dependency.
+- file: `.github/workflows/publish-npm.yml`
+  reason: publishes only from a GitHub release using npm trusted publishing.
+  relation: avoids a long-lived npm token in the repository or CI configuration.
+- file: `skills/synapse-save/SKILL.md`
+  reason: translates a user request into one durable, scoped convention record.
+  relation: it is the only workflow permitted to create a memory, so it must define the record quality bar.
 
 Confirmed facts: the scaffold registered `synapse-ui` in the personal marketplace at `C:\Users\Admin\.agents\plugins\marketplace.json`; no prior marketplace entry existed. User explicitly selected the product name and repository URL. The local Git identity is the user's identity, not a Codex address.
 
 Claude Code discovers plugin manifests at `.claude-plugin/plugin.json` and loads skills from the same root-level `skills/<name>/SKILL.md` layout that Synapse UI already uses. Its skills will be namespaced as `/synapse-ui:synapse-save` and `/synapse-ui:synapse-use`; Codex consumes the same skill files through its `.codex-plugin/plugin.json` manifest.
 
-Decisions: implement a local Markdown store instead of remote or semantic-memory infrastructure; keep application as an agent-guided action after the target flow has been inspected. Build focused skills rather than one oversized frontend skill so only the needed workflow is loaded. Treat Server Actions and Route Handlers as public endpoints; validate and authorize at each mutation boundary, not in UI-only gates. Prefer Next.js native image, font, script, metadata, streaming, and testing paths before recommending dependencies.
+Decisions: implement a local Markdown store instead of remote or semantic-memory infrastructure; keep application as an agent-guided action after the target flow has been inspected. Build focused skills rather than one oversized frontend skill so only the needed workflow is loaded. Treat Server Actions and Route Handlers as public endpoints; validate and authorize at each mutation boundary, not in UI-only gates. Prefer Next.js native image, font, script, metadata, streaming, and testing paths before recommending dependencies. The unscoped npm name is unavailable, so use the publication-ready scoped name `@gabrielkqw/synapse-ui`. Save records require explicit rule, applicable context, scope, and tags; optional sections document exceptions, a concrete example, and evidence without inventing them.
 
-Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The expanded plugin's `npm run test` passed two tests that exercise save/list/find/get/delete plus unsafe-name and unconfirmed-delete rejection. After adding the security workflows, the same test suite passed again, Claude validation accepted all nine skills, and both manifests were parsed as valid JSON. The production expansion test suite passed again, Claude validation accepted all twelve skills, and a Node check confirmed CI contract plus both `0.4.0` manifests. Codex cachebuster was updated to `0.4.0+codex.20260925175108` and that exact version was installed from the personal marketplace. Initial implementation commit `5bc3e4a` was pushed to `origin/main`.
+Commands run: scaffold command completed successfully; manifest, marketplace and local Git identity were read; `node --check` passed for the memory script; Claude Code's `claude plugin validate` passed; a Node structural check confirmed both manifests use `synapse-ui` and both shared skills exist. The Codex validator could not run because its local Python environment lacks the `yaml` module. The expanded plugin's `npm run test` passed two tests that exercise save/list/find/get/delete plus unsafe-name and unconfirmed-delete rejection. After adding the security workflows, the same test suite passed again, Claude validation accepted all nine skills, and both manifests were parsed as valid JSON. The production expansion test suite passed again, Claude validation accepted all twelve skills, and a Node check confirmed CI contract plus both `0.4.0` manifests. The npm/cyber/save expansion test suite passed with structured-save acceptance and rejection cases; `npm pack --dry-run --json` verified 23 intended distribution files and Claude validation passed again. Codex cachebuster was updated to `0.5.0+codex.20260925175730` and that exact version was installed from the personal marketplace. Initial implementation commit `5bc3e4a` was pushed to `origin/main`.
 
-Next action: commit the completed production expansion locally; push only on explicit request.
+Next action: commit and push the full npm/cyber/save block; npm Trusted Publishing setup remains a user-owned account configuration before the first release.
 
 ## Plan
-1. Encode native Next.js production and test guidance in one shared reference.
-2. Add `synapse-performance`, `synapse-test`, and `synapse-seo` without inventing framework-specific templates.
-3. Add MIT license and minimal Node CI, update metadata and README, then validate all skills and the package.
+1. Replace `--body` with required `--rule`, `--when`, `--scope`, and `--tags`; format optional exception/example/evidence data predictably.
+2. Make save derive and confirm the fields, then read back the saved record; make use respect scope and exceptions.
+3. Test structured output and missing-field rejection before committing and pushing the complete block.
 
 ## Changes made
-Plugin scaffold registered; manifest metadata aligned with the selected name, owner, and repository. A Claude Code manifest was added without duplicating the skills or persistence script. The plugin now includes component, form, Next.js, design-system, review, security, payload-review, performance, test, and SEO workflows, a shared frontend baseline, researched security and production contracts, an MIT license, CI, and a user-facing README. The persistence script supports content search and guarded deletion; Node's native test runner covers the storage lifecycle and safety guards.
+Plugin scaffold registered; manifest metadata aligned with the selected name, owner, and repository. A Claude Code manifest was added without duplicating the skills or persistence script. The plugin now includes component, form, Next.js, design-system, review, security, payload-review, performance, test, SEO, threat-model, and dependency-review workflows, a shared frontend baseline, researched security and production contracts, an MIT license, CI, a release-only trusted npm publishing workflow, and a user-facing README. The persistence script supports content search and guarded deletion; saves now require rule, applicable context, scope, and tags, with optional exception, example, and evidence sections. Node's native test runner covers the storage lifecycle and structured-save safety guards.
 
 ## Review
-The shared `skills/` layout remains valid for both hosts. The storage script keeps all persistence in one path, validates memory slugs, resolves the final path beneath the project-local store, refuses overwrite unless `--replace` is explicit, and requires a separate confirmation for deletion. The twelve specialised skills share frontend, security, and production references rather than duplicating advice. The security workflow enforces server-side validation and authorization without prescribing an auth or validation library. CI is deliberately dependency-free and read-only. No credentials, external services, or dependencies are introduced.
+The shared `skills/` layout remains valid for both hosts. The storage script keeps all persistence in one path, validates memory slugs, resolves the final path beneath the project-local store, refuses overwrite unless `--replace` is explicit, and requires a separate confirmation for deletion. Fourteen specialised skills share frontend, security, and production references rather than duplicating advice. The save workflow now rejects vague/unstructured persistence at the shared script boundary. The security workflow enforces server-side validation and authorization without prescribing an auth or validation library. CI is deliberately dependency-free and read-only; npm publishing uses OIDC only after the user configures trusted publishing in npm. No credentials, external services, or dependencies are introduced.
 
 ## Verification
 Command: `claude plugin validate C:\Users\Admin\plugins\synapse-ui`
@@ -91,11 +100,11 @@ Failures: none
 
 Command: `codex plugin add synapse-ui@personal`
 Exit: 0
-Summary: installed local cache version `0.4.0+codex.20260925175108`.
+Summary: installed local cache version `0.5.0+codex.20260925175730`.
 Failures: none
 
 ## Fidelity check
-The expanded plugin now delivers the requested complete frontend surface: durable conventions plus component, form, Next.js, design-system, review, security, payload-review, performance, test, and SEO workflows. It adds only a local test runner, CI, license, references, and documentation, while preserving no-dependency, no-telemetry, and no-automatic-edit boundaries. Both host manifests point to the same skill implementation. The prior end-to-end disk-write gap is closed by the passing temporary-directory test.
+The expanded plugin now delivers the requested complete frontend surface: durable conventions plus component, form, Next.js, design-system, review, security, payload-review, performance, test, SEO, threat-model, and dependency-review workflows. It adds a scoped npm package definition, local CLI, release-only trusted-publish workflow, test runner, CI, license, references, and documentation, while preserving no-dependency, no-telemetry, and no-automatic-edit boundaries. Both host manifests point to the same skill implementation. The prior end-to-end disk-write gap is closed by the passing temporary-directory test.
 
 ## Open / blocked
-The Codex-specific schema validator still needs PyYAML available locally. The production expansion is ready for a local commit; push remains user-controlled.
+The Codex-specific schema validator still needs PyYAML available locally. Before the first npm release, configure npm Trusted Publishing for `@gabrielkqw/synapse-ui` and this GitHub repository; do not add an npm token to the repository.

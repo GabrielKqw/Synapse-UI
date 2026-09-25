@@ -28,6 +28,18 @@ function escapeYaml(value) {
   return value.replace(/[\r\n]+/g, " ").replace(/"/g, '\\"').trim();
 }
 
+function tags(value) {
+  const parsed = value.split(",").map((tag) => tag.trim().toLowerCase()).filter(Boolean);
+  if (!parsed.length || parsed.some((tag) => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag))) {
+    fail("--tags must be a comma-separated list of lowercase kebab-case tags.");
+  }
+  return [...new Set(parsed)];
+}
+
+function section(title, value) {
+  return value ? `\n## ${title}\n\n${value.trim()}\n` : "";
+}
+
 function list() {
   if (!existsSync(memoryDir)) return [];
   return readdirSync(memoryDir, { withFileTypes: true })
@@ -39,14 +51,22 @@ function list() {
 if (command === "save") {
   const name = option("--name");
   const title = option("--title");
-  const scope = option("--scope") || "Next.js and TypeScript frontend";
-  const body = option("--body");
+  const scope = option("--scope");
+  const rule = option("--rule");
+  const when = option("--when");
+  const tagList = option("--tags");
+  const avoid = option("--avoid");
+  const example = option("--example");
+  const evidence = option("--evidence") || "User-confirmed project convention";
   const replace = args.includes("--replace");
-  if (!name || !title || !body) fail("save requires --name, --title, and --body.");
+  if (!name || !title || !scope || !rule || !when || !tagList) {
+    fail("save requires --name, --title, --scope, --rule, --when, and --tags.");
+  }
   const file = memoryPath(name);
   if (existsSync(file) && !replace) fail(`'${name}' already exists; use --replace only after confirming replacement.`);
+  const normalizedTags = tags(tagList);
   mkdirSync(memoryDir, { recursive: true });
-  writeFileSync(file, `---\nname: ${name}\ntitle: "${escapeYaml(title)}"\nscope: "${escapeYaml(scope)}"\n---\n\n# Convention\n\n${body.trim()}\n`, "utf8");
+  writeFileSync(file, `---\nschema: 1\nname: ${name}\ntitle: "${escapeYaml(title)}"\nscope: "${escapeYaml(scope)}"\ntags: [${normalizedTags.join(", ")}]\nevidence: "${escapeYaml(evidence)}"\n---\n\n# Rule\n\n${rule.trim()}\n${section("Applies when", when)}${section("Do not apply when", avoid)}${section("Example", example)}\n## Evidence\n\n${evidence.trim()}\n`, "utf8");
   console.log(`Saved ${name} at ${file}`);
 } else if (command === "list") {
   const names = list();

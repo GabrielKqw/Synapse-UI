@@ -1,9 +1,45 @@
 {
-  "name": "synapse-ui",
-  "version": "0.2.0",
-  "private": true,
+  "name": "@gabrielkqw/synapse-ui",
+  "version": "0.5.0",
+  "description": "Frontend workflow skills and local convention memory for Next.js, React, and TypeScript.",
   "type": "module",
+  "bin": {
+    "synapse-ui": "./scripts/synapse-memory.mjs"
+  },
+  "files": [
+    ".claude-plugin",
+    ".codex-plugin",
+    "skills",
+    "references",
+    "scripts"
+  ],
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "frontend",
+    "accessibility",
+    "security",
+    "codex",
+    "claude-code"
+  ],
+  "homepage": "https://github.com/GabrielKqw/Synapse-UI#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielKqw/Synapse-UI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GabrielKqw/Synapse-UI/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "prepack": "npm test"
   }
 }

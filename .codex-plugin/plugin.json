@@ -1,6 +1,6 @@
 {
   "name": "synapse-ui",
-  "version": "0.4.0+codex.20260925175108",
+  "version": "0.5.0+codex.20260925175730",
   "description": "Build, secure, test, optimize, and standardize Next.js frontend workflows.",
   "author": {
     "name": "Gabriel Costa"
@@ -16,22 +16,24 @@
     "accessibility",
     "design-system",
     "patterns",
-    "memory"
+    "memory",
+    "cybersecurity",
+    "threat-modeling"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Synapse UI",
     "shortDescription": "Ship secure, fast frontend work.",
-    "longDescription": "Stores project conventions and adds workflows for frontend implementation, security, payload review, tests, performance, and SEO.",
+    "longDescription": "Stores project conventions and adds workflows for frontend implementation, security, payload review, threat modeling, dependency review, tests, performance, and SEO.",
     "developerName": "Gabriel Costa",
     "category": "Productivity",
     "capabilities": [
       "Write"
     ],
     "defaultPrompt": [
-      "Synapse optimize this Next.js page.",
-      "Synapse test this checkout flow.",
-      "Synapse review this Server Action payload."
+      "Synapse threat-model this upload flow.",
+      "Synapse review this frontend dependency.",
+      "Synapse optimize this Next.js page."
     ],
     "brandColor": "#7C3AED"
   }
